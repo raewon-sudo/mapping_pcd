@@ -1,0 +1,41 @@
+<!-- -->
+<launch>
+
+    <!-- <param name="/use_sim_time" value="true"/> -->
+
+    <arg name="project" default="mapping_pcd"/>
+
+    <!-- PointCloud Ground Filter -->
+    <!-- nodelet manager -->
+    <!-- <arg name="manager" default="lidar_nodelet_manager" />
+    <node pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" />
+
+    <node pkg="nodelet" type="nodelet" name="ray_ground_filter" args="load pointcloud_preprocessor/ray_ground_filter_nodelet $(arg manager)">
+      <remap from="~input" to="/sensing/lidar/top/pointcloud_raw" />
+      <remap from="~output" to="/no_ground/pointcloud" />
+
+      <param name="general_max_slope" value="6.0" />
+      <param name="local_max_slope" value="6.0" />
+      <param name="min_height_threshold" value="0.15" />
+    </node>
+     -->
+    <!-- Parameters -->
+    <rosparam file="$(find mapping_pcd)/config/params.yaml" command="load" />
+
+    <!--- LIO SAM -->
+    <include file="$(find mapping_pcd)/launch/include/module_loam.launch" />
+
+    <!--- Robot State TF -->
+    <include file="$(find mapping_pcd)/launch/include/module_robot_state_publisher.launch" />
+
+    <!--- Run Navsat -->
+    <include file="$(find mapping_pcd)/launch/include/module_navsat.launch" />
+
+    <!--- Run Rviz-->
+    <include file="$(find mapping_pcd)/launch/include/module_rviz.launch" />
+
+    <!-- Run IMU_correct -->
+    <!-- <include file="$(find imu_correct)/launch/imu_correct.launch" /> -->
+
+
+</launch>

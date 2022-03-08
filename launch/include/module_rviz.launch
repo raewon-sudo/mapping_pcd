@@ -1,0 +1,9 @@
+<!-- -->
+<launch>
+
+    <arg name="project" default="mapping_pcd"/>
+
+    <!--- Run Rviz-->
+    <node pkg="rviz" type="rviz" name="$(arg project)_rviz" args="-d $(find mapping_pcd)/launch/include/config/rviz.rviz" />
+
+</launch>

@@ -1,0 +1,51 @@
+<!-- -->
+<launch>
+
+    <arg name="project" default="mapping_pcd"/>
+
+    <env name="ROSCONSOLE_CONFIG_FILE" value="$(find mapping_pcd)/launch/include/rosconsole/rosconsole_error.conf"/>
+
+<!--  Transforms  -->
+    <!-- Xe 4x4 -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="imu_transform" args="0.474 0 1.98 0 0 0 base_link tamagawa/imu_link 10" />   -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="imu_transform" args=" 0.474 0 1.98 0 0 0 base_link livox_frame 10" />   -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="gps_transform" args="0.477 0 1.704 0 0 0 base_link gnss_link 10" /> -->
+
+    <!-- Xe Vinfast -->   
+    <!-- <node pkg="tf" type="static_transform_publisher" name="imu_transform" args="-0.5 0 0 0 0 0 base_link imu_link 10" />    -->
+    <!--  -->
+
+    <!-- Balo map -->
+    <!-- Velodyne là Baselink trong map -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="imu_transform" args="0 0 0.043 0 0 0 base_link imu 10" />   -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="gps_transform" args="0 -0.118 0 0 0 0 base_link gps 10" /> -->
+    <!--  -->
+
+    <!-- EKF GPS-->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_gps" respawn="true">
+        <remap from="odometry/filtered" to="/odometry/navsat" />
+    </node >
+
+    <!-- Navsat -->
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat" respawn="true">
+        <!-- XE 4x4 --> 
+        <remap from="imu/data" to="/sensing/imu/tamagawa/imu_raw" />  
+        <remap from="gps/fix" to="/sensing/gnss/ublox/nav_sat_fix" />
+        <remap from="odometry/filtered" to="/odometry/navsat" />
+        <!--  -->
+
+        <!-- Xe Vinfast -->
+        <!-- <remap from="imu/data" to="/imu/data" />
+        <remap from="gps/fix" to="/piksi/navsatfix_best_fix" /> 
+        <remap from="odometry/filtered" to="/odometry/navsat" /> -->
+        <!--  -->
+
+        <!-- Balo map -->
+        <!-- <remap from="imu/data" to="/imu/data" />
+        <remap from="gps/fix" to="/fix" /> 
+        <remap from="odometry/filtered" to="/odometry/navsat" /> -->
+        <!--  -->
+
+    </node> 
+
+</launch>
